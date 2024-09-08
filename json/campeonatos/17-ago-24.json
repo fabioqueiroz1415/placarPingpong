@@ -1,0 +1,122 @@
+{
+  "1": {
+    "ganhador": 2,
+    "nome-ganhador": "Marcos",
+    "nome-perdedor": "Artur",
+    "perdedor": 1,
+    "sets-ganhador": 2,
+    "sets-perdedor": 1
+  },
+  "2": {
+    "ganhador": 3,
+    "nome-ganhador": "Thiago",
+    "nome-perdedor": "Felipe",
+    "perdedor": 4,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "3": {
+    "ganhador": 6,
+    "nome-ganhador": "Biel",
+    "nome-perdedor": "F\u00e1bio",
+    "perdedor": 5,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "4": {
+    "ganhador": 7,
+    "nome-ganhador": "Pek",
+    "nome-perdedor": "jogador H",
+    "perdedor": 8,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "5": {
+    "ganhador": 3,
+    "nome-ganhador": "Thiago",
+    "nome-perdedor": "Marcos",
+    "perdedor": 2,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "6": {
+    "ganhador": 6,
+    "nome-ganhador": "Biel",
+    "nome-perdedor": "Pek",
+    "perdedor": 7,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "7": {
+    "ganhador": 1,
+    "nome-ganhador": "Artur",
+    "nome-perdedor": "Felipe",
+    "perdedor": 4,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "8": {
+    "ganhador": 5,
+    "nome-ganhador": "F\u00e1bio",
+    "nome-perdedor": "jogador H",
+    "perdedor": 8,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "9": {
+    "ganhador": 6,
+    "nome-ganhador": "Biel",
+    "nome-perdedor": "Thiago",
+    "perdedor": 3,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "10": {
+    "ganhador": 2,
+    "nome-ganhador": "Marcos",
+    "nome-perdedor": "Pek",
+    "perdedor": 7,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "11": {
+    "ganhador": 5,
+    "nome-ganhador": "F\u00e1bio",
+    "nome-perdedor": "Artur",
+    "perdedor": 1,
+    "sets-ganhador": 2,
+    "sets-perdedor": 1
+  },
+  "12": {
+    "ganhador": 6,
+    "nome-ganhador": "Biel",
+    "nome-perdedor": "Marcos",
+    "perdedor": 2,
+    "sets-ganhador": 2,
+    "sets-perdedor": 1
+  },
+  "13": {
+    "ganhador": 5,
+    "nome-ganhador": "F\u00e1bio",
+    "nome-perdedor": "Thiago",
+    "perdedor": 3,
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "14": {
+    "ganhador": 5,
+    "nome-ganhador": "F\u00e1bio",
+    "nome-perdedor": "Biel",
+    "perdedor": 6,
+    "sets-ganhador": 3,
+    "sets-perdedor": 1
+  },
+  "-1": {
+    "ganhador": -1,
+    "perdedor": -1,
+    "sets-ganhador": 1,
+    "sets-perdedor": 0
+  },
+  "data": "17-ago-24",
+  "quantidade-jogadores": 8
+}

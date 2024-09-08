@@ -1,0 +1,20 @@
+{
+  "quantidade-jogadores": 6,
+  "data": "31-ago-24",
+  "-1": {
+    "ganhador": 2,
+    "perdedor": 1,
+    "nome-ganhador": "undefined",
+    "nome-perdedor": "undefined",
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  },
+  "1": {
+    "ganhador": 1,
+    "perdedor": 2,
+    "nome-ganhador": "FABIO",
+    "nome-perdedor": "THIAGO",
+    "sets-ganhador": 2,
+    "sets-perdedor": 0
+  }
+}
