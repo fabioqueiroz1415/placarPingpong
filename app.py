@@ -1,4 +1,3 @@
-from PIL import Image
 import qrcode
 import json
 from flask import Flask, render_template, request, jsonify
@@ -8,6 +7,9 @@ import socket
 from io import BytesIO
 import base64
 import os
+import webbrowser
+from tkinter import Tk, Label
+from PIL import Image, ImageTk
 
 locale.setlocale(locale.LC_TIME, 'pt_BR.utf8')
 
@@ -312,3 +314,33 @@ def generate_qr_rota_str(rota = "/"):
     img.save(buffered, format="png")
     img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
     return img_str
+
+def show_qr_code(qr, title="QR Code", duration=10000):
+    root = Tk()
+    root.title(title)
+    
+    qr_image = ImageTk.PhotoImage(qr)
+    
+    label = Label(root, image=qr_image)
+    label.pack()
+    
+    window_width = qr_image.width()
+    window_height = qr_image.height()
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    position_x = int((screen_width / 2) - (window_width / 2))
+    position_y = int((screen_height / 3) - (window_height / 2))
+
+    root.geometry(f'{window_width}x{window_height}+{position_x}+{position_y}')
+
+    root.after(duration, root.destroy)
+    root.mainloop()
+
+def abrir_pagina_web(rota = "/"):
+    url = f"{get_rota_servidor()}{rota}"
+    webbrowser.open(url)
+
+def main(): 
+    app.run(host='0.0.0.0', debug=True, threaded=True)
