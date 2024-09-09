@@ -331,7 +331,7 @@ def show_qr_code(qr, title, duration):
 
     screen_width = root.winfo_screenwidth()
 
-    position_x = int((screen_width / 2) - (window_width / 2))
+    position_x = int((screen_width / 2) - (window_width / 2) + 40)
     position_y = 20
 
     root.geometry(f'{window_width}x{window_height}+{position_x}+{position_y}')
