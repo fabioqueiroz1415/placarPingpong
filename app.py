@@ -10,6 +10,7 @@ import os
 import webbrowser
 from tkinter import Tk, Label
 from PIL import Image, ImageTk
+import threading
 
 locale.setlocale(locale.LC_TIME, 'pt_BR.utf8')
 
@@ -58,7 +59,7 @@ def funcao_placar():
     qr_code_image = generate_qr_rota_str(rota)
     rota_servidor = f"{get_rota_servidor()}{rota}"
     
-    return render_template('placar.html', placar=placar, qr_code_image=qr_code_image, rota_servidor=rota_servidor)
+    return render_template('placar.html', placar=placar)
 
 @app.route('/campeonatos')
 def campeonatos():
@@ -123,7 +124,8 @@ def post_placar():
     data = request.json
     global placar
     placar = data
-    print(data)
+    if placar['qr-code'] == 1:
+        show_qr_code_in_thread(generate_qr_rota("/links"), "/links", 10000)
     return jsonify(placar)
 
 @app.route('/get-placar', methods=['GET'])
@@ -315,7 +317,7 @@ def generate_qr_rota_str(rota = "/"):
     img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
     return img_str
 
-def show_qr_code(qr, title="QR Code", duration=10000):
+def show_qr_code(qr, title, duration):
     root = Tk()
     root.title(title)
     
@@ -328,15 +330,18 @@ def show_qr_code(qr, title="QR Code", duration=10000):
     window_height = qr_image.height()
 
     screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
 
     position_x = int((screen_width / 2) - (window_width / 2))
-    position_y = int((screen_height / 3) - (window_height / 2))
+    position_y = 20
 
     root.geometry(f'{window_width}x{window_height}+{position_x}+{position_y}')
 
     root.after(duration, root.destroy)
     root.mainloop()
+
+def show_qr_code_in_thread(qr, title="QR Code", duration=10000):
+    thread = threading.Thread(target=show_qr_code, args=(qr, title, duration))
+    thread.start()
 
 def abrir_pagina_web(rota = "/"):
     url = f"{get_rota_servidor()}{rota}"
@@ -344,3 +349,6 @@ def abrir_pagina_web(rota = "/"):
 
 def main(): 
     app.run(host='0.0.0.0', debug=True, threaded=True)
+
+if __name__ == '__main__':
+    main()

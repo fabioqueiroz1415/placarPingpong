@@ -10,11 +10,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        height: 200vh;
+        justify-content: flex-start;
+        height: 100vh;
         margin: 0;
         background-color: #222;
-        padding-top: 3vh;
+        padding-top: 8vh;
+        zoom: 400%;
       }
       
       h1 {
@@ -142,16 +143,6 @@
         <td class="sets" id="set2"></td>
         <td class="pontos" id="pontos2"></td>
       </tr>
-      <tr>
-        <td colspan="2"></td>
-        <td id="img-qr-code" colspan="2">
-          <img class="qr-code" src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" />
-        </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td id="texto-qr-code" colspan="4" class="texto-rota-servidor">Tabela Campeonato: {{ rota_servidor }}</td>
-      </tr>
     </table>
   </body>
   <script>
@@ -164,16 +155,6 @@
     
     function ocultarSetPoint() {
       document.getElementById('setPoint').classList.add('celula-oculta')
-    }
-
-    function mostrarQrCode() {
-      document.getElementById('img-qr-code').classList.remove('celula-oculta')
-      document.getElementById('texto-qr-code').classList.remove('celula-oculta')
-    }
-
-    function ocultarQrCode() {
-      document.getElementById('img-qr-code').classList.add('celula-oculta')
-      document.getElementById('texto-qr-code').classList.add('celula-oculta')
     }
 
     function mostrarCronometro() {
@@ -213,12 +194,6 @@
       } else {
         document.getElementById('vez1').innerText = ''
         document.getElementById('vez2').innerText = '>'
-      }
-
-      if(placar['qr-code'] === 1) {
-        mostrarQrCode()
-      } else {
-        ocultarQrCode()
       }
     
       if (placar.pontos1 >= 10 && placar.pontos1 >= placar.pontos2 + 1) {
