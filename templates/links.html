@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links</title>
     <style>
+        .margem-inferior {
+            height: 5rem;
+        }
       .qr-code {
           display: block;
           margin: 0 auto;
@@ -23,9 +26,14 @@
       <tr>
           <td>
               <img class="qr-code" src="data:image/png;base64,{{ qr_codes[key] }}" alt="{{ url }}">
-              <a class="link" href="{{ url }}" target="_blank">{{ key }}</a>
           </td>
       </tr>
+      <tr>
+        <td>
+            <a class="link" href="{{ url }}">{{ key }}</a>
+        </td>
+      </tr>
+      <tr class="margem-inferior"></tr>
       {% endfor %}
   </table>
 </body>
