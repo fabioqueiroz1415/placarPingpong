@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>tabela</title>
     <style>
       body {
         display: flex;
@@ -12,7 +12,6 @@
         margin: 0;
         background-color: #000;
         padding: 1vh;
-        padding-top: 5vh;
         overflow: scroll;
       }
       table {
@@ -44,8 +43,13 @@
         margin-bottom: 1vh;
       }
       .partida:active {
-        background-color: #222;
+        background-color: #6a1bb6;
       }
+
+      .partida:hover {
+        cursor: pointer;
+    }
+
       .situacao-jogo td {
         font-size: 0.8rem;
         height: 1.5rem;
@@ -69,11 +73,11 @@
         width: 1rem;
       }
       .borda-superior {
-        border-top: 1px solid #333;
+        border-top: 1px solid white;
       }
       
       .borda-inferior {
-        border-bottom: 1px solid #333;
+        border-bottom: 1px solid white;
         height: 2rem;
       }
       .td-vs {
@@ -99,26 +103,97 @@
       }
       .titulo-h3 {
         font-size: 1.5rem;
+        height: 6rem;
       }
+
+      .sistema-de-pontos {
+        border-collapse: collapse;
+        background-color: #000;
+        width: 99%;
+        color: white;
+        margin-top: 3rem;
+      }
+
+      .sistema-de-pontos tr {
+        border-bottom: 1px solid #444;
+      }
+      
+      .jogador-sistema-de-pontos:active {
+        background-color: #6a1bb6;
+      }
+
+      #container-partidas {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        background-color: #000;
+        overflow: scroll;
+        width: 100%;
+        height: 100%;
+      }
+
+      .botoes-gerais {
+        font-size: 1.5rem;
+        background-color: #444;
+        color: white;
+        padding: 1vh;
+        margin: 1vh;
+        border-radius: 1vh;
+        text-align: center;
+        width: 66%;
+        transition: all 0.2s;
+      }
+
+      .botoes-gerais:active {
+        color: white;
+        background-color: #6a1bb6;
+        scale: 0.95;
+      }
+
       .animacao-em-andamento {
-        animation: fadeInOut 1.5s infinite;
-        color:chartreuse;
-    }
+        animation: fadeInOut 3s infinite;
+        color: chartreuse;
+      }
     
     @keyframes fadeInOut {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.5;
-        }
-        100% {
-            opacity: 1;
-        }
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        opacity: 1;
+      }
     }
     </style>
   </head>
   <body>
+    <table id="botoes-gerais">
+      <tr>
+        <td></td>
+        <td class="botoes-gerais" onclick="reinicarCampeonato()">reiniciar campeonato</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="botoes-gerais" onclick="renomearJogadores()">participantes</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="botoes-gerais" onclick="salvarCampeonato()">salvar campeonato</td>
+        <td></td>
+      </tr>
+    </table>
+    <div id="container-partidas">
+    </div>
     <!-- <table id="partida" class="partida">
       <tr class="borda-superior"></tr>
       <tr id="situacao-jogo" class="situacao-jogo">
@@ -180,6 +255,50 @@
       var partida_atual = {{partida_atual | tojson}}
       var placar_atual = {{placar_atual | tojson}}
       var quantidade_jogadores = Object.keys(jogadores).length
+      var containerPartidas = document.getElementById('container-partidas')
+
+      function reinicarCampeonato() {
+        if (confirm('Tem certeza de que deseja reiniciar o campeonato?')) {
+          fetch('/reiniciar-campeonato', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+          })
+            .then((response) => {
+              if (response.ok) {
+                window.location.reload() // Recarregar a página para reiniciar o campeonato
+              } else {
+                console.error('Erro ao reiniciar o campeonato')
+              }
+            })
+            .catch((error) => console.error('Erro ao enviar dados para reiniciar o campeonato:', error))
+        }
+      }
+
+      function renomearJogadores() {
+        window.location.href = '/jogadores'
+      }
+
+      function salvarCampeonato() {
+        if (!confirm('Tem certeza de que deseja salvar o campeonato?')) return
+            fetch('/salvar-campeonato', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(resultados)
+            })
+              .then((response) => {
+                if (response.ok) {
+                  alert("feito.")
+                } else {
+                  console.error('Erro ao salvar o campeonato')
+                }
+              })
+              .catch((error) => console.error('Erro ao enviar dados para salvar o campeonato:', error))
+      }
 
       async function atualizaVariaveis() {
         const response1 = await fetch('/get-partida', {
@@ -211,7 +330,7 @@
       }
 
       function atualizarTabela() {
-        document.body.textContent = ''
+        containerPartidas.textContent = ''
         if (quantidade_jogadores === 6) {
           partidasTextos = [
           ["A", "B"], // Partida 0 (1)
@@ -234,22 +353,26 @@
           addConfronto(1, 1, { tipo: 'direto', jogador: 1 , texto: partidasTextos[0][0]}, { tipo: 'direto', jogador: 2 , texto: partidasTextos[0][1]})
           addConfronto(1, 2, { tipo: 'direto', jogador: 3 , texto: partidasTextos[1][0]}, { tipo: 'direto', jogador: 4 , texto: partidasTextos[1][1]})
           addConfronto(1, 3, { tipo: 'direto', jogador: 5 , texto: partidasTextos[2][0]}, { tipo: 'direto', jogador: 6 , texto: partidasTextos[2][1]})
-          addH3('Rodada 2')
+          addH3('Rodada 2 Chave 1')
           addConfronto(2, 4, { tipo: 'resultado', resultado: 1, estado: 'ganhador' , texto: partidasTextos[3][0]}, { tipo: 'resultado', resultado: 2, estado: 'ganhador' , texto: partidasTextos[3][1]})
           addConfronto(2, 5, { tipo: 'resultado', resultado: 3, estado: 'ganhador' , texto: partidasTextos[4][0]}, { tipo: 'resultado', resultado: 1, estado: 'ganhador' , texto: partidasTextos[4][1]})
           addConfronto(2, 6, { tipo: 'resultado', resultado: 2, estado: 'ganhador' , texto: partidasTextos[5][0]}, { tipo: 'resultado', resultado: 3, estado: 'ganhador' , texto: partidasTextos[5][1]})
           mostrarColocacoes(2, [4, 5, 6], 3)
-          addH3('Rodada 2 - Repescagem')
+          addH3('Rodada 2 Chave 2')
           addConfronto(2, 7, { tipo: 'resultado', resultado: 1, estado: 'perdedor' , texto: partidasTextos[6][0]}, { tipo: 'resultado', resultado: 2, estado: 'perdedor' , texto: partidasTextos[6][1]})
           addConfronto(2, 8, { tipo: 'resultado', resultado: 3, estado: 'perdedor' , texto: partidasTextos[7][0]}, { tipo: 'resultado', resultado: 1, estado: 'perdedor' , texto: partidasTextos[7][1]})
           addConfronto(2, 9, { tipo: 'resultado', resultado: 3, estado: 'perdedor' , texto: partidasTextos[8][0]}, { tipo: 'resultado', resultado: 2, estado: 'perdedor' , texto: partidasTextos[8][1]})
-          mostrarColocacoes('Rodada 2 - Repescagem', [7, 8, 9], 3)
+          mostrarColocacoes('Rodada 2 Chave 2', [7, 8, 9], 3)
           const classificadosC1 = calcularClassificados([4, 5, 6])
           const classificadosC2 = calcularClassificados([7, 8, 9])
+          addH3('Rodada 3')
           addConfronto(3, 10, { tipo: 'classificado', jogador: classificadosC1[0] , texto: partidasTextos[9][0]}, { tipo: 'classificado', jogador: classificadosC1[1] , texto: partidasTextos[9][1]})
           addConfronto(3, 11, { tipo: 'classificado', jogador: classificadosC2[0] , texto: partidasTextos[10][0]}, { tipo: 'classificado', jogador: classificadosC2[1] , texto: partidasTextos[10][1]})
+          addH3('Rodada 4')
           addConfronto(4, 12, { tipo: 'classificado', jogador: classificadosC1[2] , texto: partidasTextos[11][0]}, { tipo: 'resultado', resultado: 11, estado: 'ganhador' , texto: partidasTextos[11][1]})
+          addH3('Rodada 5')
           addConfronto(5, 13, { tipo: 'resultado', resultado: 10, estado: 'perdedor' , texto: partidasTextos[12][0]}, { tipo: 'resultado', resultado: 12, estado: 'ganhador' , texto: partidasTextos[12][1]})
+          addH3('Final')
           addConfronto('Final', 14, { tipo: 'resultado', resultado: 10, estado: 'ganhador' , texto: partidasTextos[13][0]}, { tipo: 'resultado', resultado: 13, estado: 'ganhador' , texto: partidasTextos[13][1]})
         } else if (quantidade_jogadores === 8) {
           partidasTextos = [
@@ -268,20 +391,26 @@
           ["Perdedor jogo 9", "Ganhador jogo 12"], // Partida 12 (13)
           ["Ganhador jogo 9", "Ganhador jogo 13"] // Partida 13 (14)
         ]      
-  
+          addH3('Rodada 1')
           addConfronto(1, 1, { tipo: 'direto', jogador: 1 , texto: partidasTextos[0][0]}, { tipo: 'direto', jogador: 2 , texto: partidasTextos[0][1]})
           addConfronto(1, 2, { tipo: 'direto', jogador: 3 , texto: partidasTextos[1][0]}, { tipo: 'direto', jogador: 4 , texto: partidasTextos[1][1]})
           addConfronto(1, 3, { tipo: 'direto', jogador: 5 , texto: partidasTextos[2][0]}, { tipo: 'direto', jogador: 6 , texto: partidasTextos[2][1]})
           addConfronto(1, 4, { tipo: 'direto', jogador: 7 , texto: partidasTextos[3][0]}, { tipo: 'direto', jogador: 8 , texto: partidasTextos[3][1]})
+          addH3('Rodada 2 Chave 1')
           addConfronto(2, 5, { tipo: 'resultado', resultado: 1, estado: 'ganhador' , texto: partidasTextos[4][0]}, { tipo: 'resultado', resultado: 2, estado: 'ganhador' , texto: partidasTextos[4][1]})
           addConfronto(2, 6, { tipo: 'resultado', resultado: 3, estado: 'ganhador' , texto: partidasTextos[5][0]}, { tipo: 'resultado', resultado: 4, estado: 'ganhador' , texto: partidasTextos[5][1]})
-          addConfronto("2 - Repescagem", 7, { tipo: 'resultado', resultado: 1, estado: 'perdedor' , texto: partidasTextos[6][0]}, { tipo: 'resultado', resultado: 2, estado: 'perdedor' , texto: partidasTextos[6][1]})
-          addConfronto("2 - Repescagem", 8, { tipo: 'resultado', resultado: 3, estado: 'perdedor' , texto: partidasTextos[7][0]}, { tipo: 'resultado', resultado: 4, estado: 'perdedor' , texto: partidasTextos[7][1]})
+          addH3('Rodada 2 Chave 2')
+          addConfronto(2, 7, { tipo: 'resultado', resultado: 1, estado: 'perdedor' , texto: partidasTextos[6][0]}, { tipo: 'resultado', resultado: 2, estado: 'perdedor' , texto: partidasTextos[6][1]})
+          addConfronto(2, 8, { tipo: 'resultado', resultado: 3, estado: 'perdedor' , texto: partidasTextos[7][0]}, { tipo: 'resultado', resultado: 4, estado: 'perdedor' , texto: partidasTextos[7][1]})
+          addH3('Rodada 3')
           addConfronto(3, 9, { tipo: 'resultado', resultado: 5, estado: 'ganhador' , texto: partidasTextos[8][0]}, { tipo: 'resultado', resultado: 6, estado: 'ganhador' , texto: partidasTextos[8][1]})
           addConfronto(3, 10, { tipo: 'resultado', resultado: 5, estado: 'perdedor' , texto: partidasTextos[9][0]}, { tipo: 'resultado', resultado: 6, estado: 'perdedor' , texto: partidasTextos[9][1]})
           addConfronto(3, 11, { tipo: 'resultado', resultado: 7, estado: 'ganhador' , texto: partidasTextos[10][0]}, { tipo: 'resultado', resultado: 8, estado: 'ganhador' , texto: partidasTextos[10][1]})
+          addH3('Rodada 4')
           addConfronto(4, 12, { tipo: 'resultado', resultado: 10, estado: 'ganhador' , texto: partidasTextos[11][0]}, { tipo: 'resultado', resultado: 11, estado: 'ganhador' , texto: partidasTextos[11][1]})
+          addH3('Rodada 5')
           addConfronto(5, 13, { tipo: 'resultado', resultado: 9, estado: 'perdedor' , texto: partidasTextos[12][0]}, { tipo: 'resultado', resultado: 12, estado: 'ganhador' , texto: partidasTextos[12][1]})
+          addH3('Final')
           addConfronto("Final", 14, { tipo: 'resultado', resultado: 9, estado: 'ganhador' , texto: partidasTextos[13][0]}, { tipo: 'resultado', resultado: 13, estado: 'ganhador' , texto: partidasTextos[13][1]})
         }
       }
@@ -496,7 +625,7 @@
 
         }
         
-        document.body.appendChild(tabela)
+        containerPartidas.appendChild(tabela)
       }
 
       function mostrarColocacoes(rodada, jogos, quantidadePosicoes) {
@@ -515,7 +644,7 @@
         tabela.innerHTML = `
           <tr class="borda-superior"><td colspan="4">----------------------------------</td></tr>
           <tr>
-            <td colspan="4" class="titulo-h3">Sistema de pontos - Rodada: ${rodada}</td>
+            <td colspan="4" class="titulo-h3">Sistema de pontos - Rodada ${rodada}</td>
           </tr>
           <tr>
             <td></td> <td></td> <td>v</td> <td>s</td>
@@ -528,7 +657,7 @@
                                     <td class="nome">${jogadores[classificado.jogador]}</td>
                                     <td>${classificado.vitorias}</td>
                                     <td>${classificado.diferencaSets}</td>`
-          colocacoesTr.className = 'info-jogador'
+          colocacoesTr.className = 'jogador-sistema-de-pontos'
           if(jogadores[classificado.jogador] && jogadores[classificado.jogador] % 2) colocacoesTr.classList.add('fundo-cinza')
           
           tabela.appendChild(colocacoesTr)
@@ -537,7 +666,7 @@
         bordaInferiorTd.innerHTML = '<td colspan="4">----------------------------------</td>'
         bordaInferiorTd.className = 'borda-inferior'
         tabela.appendChild(bordaInferiorTd)
-        document.body.appendChild(tabela)
+        containerPartidas.appendChild(tabela)
       }
 
       function calcularClassificados(jogos, quantidadeJogadores) {
@@ -593,8 +722,8 @@
 
       function addH3(texto) {
         h3 = document.createElement('table')
-        h3.innerHTML = `<tr><td class='titulo-h3'>${texto}</td></tr>`
-        document.body.appendChild(h3)
+        h3.innerHTML = `<tr class='titulo-h3'><td>${texto}</td></tr>`
+        containerPartidas.appendChild(h3)
       }
       
       function atualizarDados() {

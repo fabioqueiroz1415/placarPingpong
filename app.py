@@ -72,11 +72,11 @@ def campeonatos():
         campeonatos_index = {}
     return render_template('campeonatos.html', campeonatos_index=campeonatos_index)
 
-@app.route('/tabela')
+@app.route('/tabela_v1')
 def tabela():
     return render_template('tabela.html', placar=placar)
 
-@app.route('/tabela_v2')
+@app.route('/tabela')
 def tabela_v2():
     jogadores_path = 'json/jogadores.json'
     # Verifica se o arquivo existe antes de tentar abri-lo
